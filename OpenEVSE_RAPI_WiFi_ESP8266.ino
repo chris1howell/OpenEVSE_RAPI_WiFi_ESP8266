@@ -84,6 +84,45 @@ void handleRapi() {
   server.send(200, "text/html", s);
 }
 
+void handleJSON() {
+  String url_amp = inputID_AMP;
+  url_amp += amp;
+  url_amp += ",";
+  String url_volt = inputID_VOLT;
+  url_volt += volt;
+  url_volt += ",";
+  String url_temp1 = inputID_TEMP1;
+  url_temp1 += temp1;
+  url_temp1 += ",";
+  String url_temp2 = inputID_TEMP2;
+  url_temp2 += temp2;
+  url_temp2 += ","; 
+  String url_temp3 = inputID_TEMP3;
+  url_temp3 += temp3;
+  url_temp3 += ","; 
+  String url_pilot = inputID_PILOT;
+  url_pilot += pilot;
+  String s;
+  s = "{";
+  s += url_amp;
+  if (volt > 0) {
+      s += url_volt;
+  }
+  if (temp1 != 0) {
+      s += url_temp1;
+  }
+  if (temp2 != 0) {
+      s += url_temp2;
+  }
+  if (temp3 != 0) {
+      s += url_temp3;
+  }
+  s+= url_pilot;
+  s+= "}";
+  s += "\r\n\r\n";
+  server.send(200, "text/plain", s);
+}
+
 void handleRapiR() {
   String s;
   String rapiString;
@@ -302,6 +341,7 @@ void setup() {
   server.on("/reset", handleRst);
   server.on("/status", handleStatus);
   server.on("/rapi", handleRapi);
+  server.on("/json", handleJSON);
 	server.begin();
 	//Serial.println("HTTP server started");
   delay(100);
