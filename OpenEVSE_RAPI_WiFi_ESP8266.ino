@@ -23,16 +23,40 @@
 
 ESP8266WebServer server(80);
 
+// EEPROM Memory Map, beginning bytes.
+// SSID                bytes 0-31
+#define EESSID 0
+// WPA Passphrase      bytes 32-95
+#define EEWPA 32
+// EMonCMS access key  bytes 96-128
+#define EEKEY 96
+// EMonCMS Node        byte 129
+#define EENODE 129
+// EMonCMS Hostname    bytes 130-159
+#define EEHOST 130
+
+// Declare functions.
+void ResetEEPROM();
+void handleRoot();
+void handleRapi();
+void handleJSON();
+void handleRapiR();
+void handleCfg();
+void handleRst();
+void handleStatus();
+void setup();
+void loop();
+
 //Default SSID and PASSWORD for AP Access Point Mode
 const char* ssid = "OpenEVSE";
 const char* password = "openevse";
 String st;
 String privateKey = "";
 String node = "";
-
+String host = "data.openevse.com";
 
 //SERVER strings and interfers for OpenEVSE Energy Monotoring
-const char* host = "data.openevse.com";
+// const char* host = "data.openevse.com";
 const char* e_url = "/emoncms/input/post.json?node=";
 const char* inputID_AMP   = "OpenEVSE_AMP:";
 const char* inputID_VOLT   = "OpenEVSE_VOLT:";
@@ -64,13 +88,20 @@ void ResetEEPROM(){
 }
 
 void handleRoot() {
+  String qsid = server.arg("ssid");
+  if (qsid != 0) {
+    handleRapi();
+    return;
+  }
   String s;
   s = "<html><font size='20'><font color=006666>Open</font><b>EVSE</b></font><p><b>Open Source Hardware</b><p>Wireless Configuration<p>Networks Found:<p>";
         //s += ipStr;
         s += "<p>";
         s += st;
         s += "<p>";
-        s += "<form method='get' action='a'><label><b><i>WiFi SSID:</b></i></label><input name='ssid' length=32><p><label><b><i>Password  :</b></i></label><input name='pass' length=64><p><label><b><i>Device Access Key:</b></i></label><input name='ekey' length=32><p><label><b><i>Node:</b></i></label><select name='node'><option value='0'>0 - Default</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option></select><p><input type='submit'></form>";
+        s += "<form method='get' action='a'><label><b><i>WiFi SSID:</b></i></label><input name='ssid' length=32><p><label><b><i>Password  :</b></i></label><input name='pass' length=64><p><label><b><i>EMonCMS Host:</b></i></label><input name='ehost' length=60 value='";
+        s += host;
+        s += "'><p><label><b><i>Device Access Key:</b></i></label><input name='ekey' length=32><p><label><b><i>Node:</b></i></label><select name='node'><option value='0'>0 - Default</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option></select><p><input type='submit'></form>";
         s += "</html>\r\n\r\n";
 	server.send(200, "text/html", s);
 }
@@ -112,6 +143,7 @@ void handleCfg() {
   String qpass = server.arg("pass");      
   String qkey = server.arg("ekey");
   String qnode = server.arg("node");
+  String qhost = server.arg("host");
  
   qpass.replace("%23", "#");
   qpass.replace('+', ' ');
@@ -123,14 +155,18 @@ void handleCfg() {
     }
     //Serial.println("Writing Password to Memory:"); 
     for (int i = 0; i < qpass.length(); ++i){
-      EEPROM.write(32+i, qpass[i]); 
+      EEPROM.write(EEWPA+i, qpass[i]);
     }
     //Serial.println("Writing EMON Key to Memory:"); 
     for (int i = 0; i < qkey.length(); ++i){
-      EEPROM.write(96+i, qkey[i]); 
+      EEPROM.write(EEKEY+i, qkey[i]);
     }
      
-    EEPROM.write(129, qnode[i]);
+    EEPROM.write(EENODE, qnode[i]);
+    //Serial.println("Writing EMON Host to Memory:");
+    for (int i = 0; i < qhost.length(); ++i){
+      EEPROM.write(EEHOST+i, qhost[i]);
+    }
     EEPROM.commit();
     s = "<html><font size='20'><font color=006666>Open</font><b>EVSE</b></font><p><b>Open Source Hardware</b><p>Wireless Configuration<p>SSID and Password<p>";
     //s += req;
@@ -146,11 +182,14 @@ void handleCfg() {
         s += "<p>";
         s += st;
         s += "<p>";
-        s += "<form method='get' action='a'><label><b><i>WiFi SSID:</b></i></label><input name='ssid' length=32><p><font color=FF0000><b>SSID Required<b></font><p></font><label><b><i>Password  :</b></i></label><input name='pass' length=64><p><label><b><i>Device Access Key:</b></i></label><input name='ekey' length=32><p><label><b><i>Node:</b></i></label><select name='node'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option></select><p><input type='submit'></form>";
+        s += "<form method='get' action='a'><label><b><i>WiFi SSID:</b></i></label><input name='ssid' length=32><p><font color=FF0000><b>SSID Required<b></font><p></font><label><b><i>Password  :</b></i></label><input name='pass' length=64><p><label><b><i>EMonCMS Host:</b></i></label><input name='ehost' length=60 value='";
+        s += host;
+        s += "'><p><label><b><i>Device Access Key:</b></i></label><input name='ekey' length=32><p><label><b><i>Node:</b></i></label><select name='node'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option></select><p><input type='submit'></form>";
         s += "</html>\r\n\r\n";
      server.send(200, "text/html", s);
   }
 }
+
 void handleRst() {
   String s;
   s = "<html><font size='20'><font color=006666>Open</font><b>EVSE</b></font><p><b>Open Source Hardware</b><p>Wireless Configuration<p>Reset to Defaults:<p>";
@@ -182,17 +221,23 @@ void setup() {
   char tmpStr[40];
   String esid;
   String epass = "";
- 
-  for (int i = 0; i < 32; ++i){
+  String tmphost = "";
+
+  for (int i = EESSID; i < 32; ++i){
     esid += char(EEPROM.read(i));
   }
-  for (int i = 32; i < 96; ++i){
+  for (int i = EEWPA; i < 96; ++i){
     epass += char(EEPROM.read(i));
   }
-  for (int i = 96; i < 128; ++i){
+  for (int i = EEKEY; i < 128; ++i){
     privateKey += char(EEPROM.read(i));
   }
-  node += char(EEPROM.read(129));
+  node += char(EEPROM.read(EENODE));
+  for (int i = EEHOST; i < 160; ++i){
+    tmphost += char(EEPROM.read(i));
+  }
+  if (tmphost.length() > 0)
+    host = tmphost.c_str();
      
   if ( esid != 0 ) { 
     //Serial.println(" ");
@@ -387,7 +432,7 @@ if (wifi_mode == 0 && privateKey != 0){
 // Use WiFiClient class to create TCP connections
     WiFiClient client;
     const int httpPort = 80;
-    if (!client.connect(host, httpPort)) {
+    if (!client.connect(host.c_str(), httpPort)) {
       return;
     }
   
@@ -430,12 +475,12 @@ if (wifi_mode == 0 && privateKey != 0){
     url += privateKey.c_str();
     
 // This will send the request to the server
-    client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
+    client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host.c_str() + "\r\n" + "Connection: close\r\n\r\n");
     delay(10);
     while(client.available()){
       String line = client.readStringUntil('\r');
     }
-    //Serial.println(host);
+    //Serial.println(host.c_str());
     //Serial.println(url);
     
   }
