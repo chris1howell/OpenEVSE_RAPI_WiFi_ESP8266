@@ -672,7 +672,7 @@ void handleRapiRead() {
       }
     }
     Serial.flush();
-    Serial.println("$GE*B0");
+    Serial.println("$GS*BE");
      comm_sent++;
      delay(100);
        while(Serial.available()) {
