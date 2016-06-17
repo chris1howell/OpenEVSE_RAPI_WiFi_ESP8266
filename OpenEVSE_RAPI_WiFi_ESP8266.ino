@@ -960,7 +960,7 @@ if (wifi_mode == 0 || wifi_mode == 3 && apikey != 0){
     url += node;
     url += "&json={";
     url += url_amp;
-    if (volt <= 0) {
+    if (volt > 0) {
       url += url_volt;
     }
     if (temp1 != 0) {
