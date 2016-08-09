@@ -59,7 +59,7 @@ String ipaddress = "";
 const char* host = "data.openevse.com"; //Default to use the OpenEVSE EmonCMS Server
 const char* emon_fingerprint = "‎e8:02 ca 30 fc 5d a0 3c b0 34 60 d6 1b d2 54 ea 86 2a 09 16";
 //const char* host = "www.emoncms.org"; //Optional to use Open Energy EmonCMS servers
-//const char* emon_fingerprint = "6B 39 04 A4 BB E0 87 B2 EB B6 FE 77 CD D5 F6 A7 22 4B 3B ED";
+//const char* emon_fingerprint = "7D 82 15 BE D7 BC 72 58 87 7D 8E 40 D4 80 BA 1A 9F 8B 8D DA";
 //const char* host = "192.168.1.123";  //Optional to use your own EmonCMS server
 const int httpsPort = 443;
 const char* e_url = "/emoncms/input/post.json?node=";
