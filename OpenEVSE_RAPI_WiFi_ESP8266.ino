@@ -79,6 +79,18 @@ void ResetEEPROM(){
   EEPROM.commit();   
 }
 
+// Build the command to display the IP, but right pad it to 
+// the full width of a 16 char wide LCD
+void buildIPCommand(IPAddress myIP, char *tmpStr) {
+  const int maxLen=24;
+  sprintf(tmpStr,"$FP 0 1 %d.%d.%d.%d",myIP[0],myIP[1],myIP[2],myIP[3]);
+  int len = strlen(tmpStr);
+  while (len < maxLen ) {
+    tmpStr[len++] = ' ';
+  }
+  tmpStr[len] = '\0';
+}
+
 void setup() {
 	delay(1000);
 	Serial.begin(115200);
@@ -152,7 +164,7 @@ void setup() {
           delay(5000);
           Serial.println("$FP 0 0 IP_Address......");
           delay(100);
-          sprintf(tmpStr,"$FP 0 1 %d.%d.%d.%d",myIP[0],myIP[1],myIP[2],myIP[3]);
+          buildIPCommand(myIP, tmpStr);
           Serial.println(tmpStr);
           wifi_mode = 1;
           break;
@@ -185,9 +197,8 @@ void setup() {
     delay(5000);
     Serial.println("$FP 0 0 IP_Address......");
     delay(100);
-    sprintf(tmpStr,"$FP 0 1 %d.%d.%d.%d",myIP[0],myIP[1],myIP[2],myIP[3]);
+    buildIPCommand(myIP, tmpStr);
     Serial.println(tmpStr);
-   
     
     wifi_mode = 2; //AP mode with no SSID in EEPROM
   }
@@ -199,7 +210,7 @@ void setup() {
     //Serial.println(myAddress);
     Serial.println("$FP 0 0 Client-IP.......");
     delay(100);
-    sprintf(tmpStr,"$FP 0 1 %d.%d.%d.%d",myAddress[0],myAddress[1],myAddress[2],myAddress[3]);
+    buildIPCommand(myAddress, tmpStr);
     Serial.println(tmpStr);
   }
 
