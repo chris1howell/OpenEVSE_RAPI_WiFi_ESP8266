@@ -46,7 +46,7 @@ r1.onreadystatechange = function () {
     document.getElementById("mqtt_connected").innerHTML = "No";
   }
 
-  document.getElementById("free_heap").innerHTML = status.free_heap;
+  // document.getElementById("free_heap").innerHTML = status.free_heap;
   document.getElementById("version").innerHTML = status.version;
   document.getElementById("ohmkey").value = status.ohmkey;
 
@@ -153,9 +153,9 @@ var r3 = new XMLHttpRequest();
     document.getElementById("comm-psuccess").innerHTML = update.comm_success;
     document.getElementById("sta-psent").innerHTML = update.packets_sent;
     document.getElementById("sta-psuccess").innerHTML = update.packets_success;
-	  document.getElementById("amp").innerHTML = update.amp;
+	  // document.getElementById("amp").innerHTML = update.amp;
 	  document.getElementById("estate").innerHTML = update.estate;
-	  document.getElementById("espvcc").innerHTML = update.espvcc;
+	  // document.getElementById("espvcc").innerHTML = update.espvcc;
 	  document.getElementById("espfree").innerHTML = update.espfree;
 	  document.getElementById("ohmhour").innerHTML = update.ohmhour;
 	  document.getElementById("wattsec").innerHTML = update.wattsec;
@@ -188,7 +188,7 @@ function update() {
       document.getElementById("sta-psent").innerHTML = update.packets_sent;
       document.getElementById("sta-psuccess").innerHTML = update.packets_success;
 	  document.getElementById("estate").innerHTML = update.estate;
-	  document.getElementById("espvcc").innerHTML = update.espvcc;
+	  // document.getElementById("espvcc").innerHTML = update.espvcc;
 	  document.getElementById("espfree").innerHTML = update.espfree;
 	  document.getElementById("ohmhour").innerHTML = update.ohmhour;
 	  document.getElementById("wattsec").innerHTML = update.wattsec;
@@ -205,7 +205,7 @@ function update() {
     if (r2.readyState != 4 || r2.status != 200) return;
       var status = JSON.parse(r2.responseText);
 
-      document.getElementById("free_heap").innerHTML = status.free_heap;
+      // document.getElementById("free_heap").innerHTML = status.free_heap;
 
       if (status.emoncms_connected == "1"){
        document.getElementById("emoncms_connected").innerHTML = "Yes";
@@ -466,42 +466,42 @@ for (var i = 0; i < networkcheckboxes.length; i++) {
 // Event:Check for updates & display current / latest
 // URL /firmware
 // -----------------------------------------------------------------------
-document.getElementById("updatecheck").addEventListener("click", function(e) {
-    document.getElementById("firmware-version").innerHTML = "<tr><td>-</td><td>Connecting...</td></tr>";
-    var r = new XMLHttpRequest();
-    r.open("POST", "firmware", true);
-    r.onreadystatechange = function () {
-        if (r.readyState != 4 || r.status != 200) return;
-        var str = r.responseText;
-        console.log(str);
-        var firmware = JSON.parse(r.responseText);
-        document.getElementById("firmware").style.display = '';
-        document.getElementById("update").style.display = '';
-        document.getElementById("firmware-version").innerHTML = "<tr><td>"+firmware.current+"</td><td>"+firmware.latest+"</td></tr>";
-	  };
-    r.send();
-});
+//document.getElementById("updatecheck").addEventListener("click", function(e) {
+//    document.getElementById("firmware-version").innerHTML = "<tr><td>-</td><td>Connecting...</td></tr>";
+//    var r = new XMLHttpRequest();
+//    r.open("POST", "firmware", true);
+//    r.onreadystatechange = function () {
+//        if (r.readyState != 4 || r.status != 200) return;
+//        var str = r.responseText;
+//        console.log(str);
+//        var firmware = JSON.parse(r.responseText);
+//        document.getElementById("firmware").style.display = '';
+//        document.getElementById("update").style.display = '';
+//        document.getElementById("firmware-version").innerHTML = "<tr><td>"+firmware.current+"</td><td>"+firmware.latest+"</td></tr>";
+//	  };
+//    r.send();
+//});
 
 
 // -----------------------------------------------------------------------
 // Event:Update Firmware
 // -----------------------------------------------------------------------
-document.getElementById("update").addEventListener("click", function(e) {
-    document.getElementById("update-info").innerHTML = "UPDATING..."
-    var r1 = new XMLHttpRequest();
-    r1.open("POST", "update", true);
-    r1.onreadystatechange = function () {
-        if (r1.readyState != 4 || r1.status != 200) return;
-        var str1 = r1.responseText;
-        document.getElementById("update-info").innerHTML = str1
-        console.log(str1);
-	  };
-    r1.send();
-});
+//document.getElementById("update").addEventListener("click", function(e) {
+//    document.getElementById("update-info").innerHTML = "UPDATING..."
+//    var r1 = new XMLHttpRequest();
+//    r1.open("POST", "update", true);
+//    r1.onreadystatechange = function () {
+//        if (r1.readyState != 4 || r1.status != 200) return;
+//        var str1 = r1.responseText;
+//        document.getElementById("update-info").innerHTML = str1
+//        console.log(str1);
+//	  };
+//    r1.send();
+//});
 
 // -----------------------------------------------------------------------
 // Event:Upload Firmware
 // -----------------------------------------------------------------------
-document.getElementById("upload").addEventListener("click", function(e) {
-  window.location.href='/upload'
-});
+//document.getElementById("upload").addEventListener("click", function(e) {
+//  window.location.href='/upload'
+//});
