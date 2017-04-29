@@ -90,35 +90,35 @@ var r2 = new XMLHttpRequest();
               var config = JSON.parse(r2.responseText);
               document.getElementById("firmware").innerHTML = config.firmware;
               document.getElementById("protocol").innerHTML = config.protocol;
-              document.getElementById("diodet").innerHTML = config.diodet;
+              document.getElementById("diodet").innerHTML = (config.diodet == "1" ? "Disabled" : "Enabled");
 			 // if (config.diodet == "1"){
 				// document.getElementById("diodet").innerHTML = "Disabled <a title='Enable' href='/r?rapi=%24SD+1'><img src='check.png'></a>";
 				// }
 				// else {
 				// document.getElementById("diodet").innerHTML = "Enabled <a title='Disable' href='/r?rapi=%24SD+0'><img src='x.png'></a>";
 				// }
-    //           document.getElementById("gfcit").innerHTML = config.gfcit;
+              document.getElementById("gfcit").innerHTML = (config.gfcit == "1" ? "Disabled" : "Enabled");
 			 // if (config.gfcit == "1"){
 				// document.getElementById("gfcit").innerHTML = "Disabled <a title='Enable' href='/r?rapi=%24SS+1'><img src='check.png'></a>";
 				// }
 				// else {
 				// document.getElementById("gfcit").innerHTML = "Enabled <a title='Disable' ref='/r?rapi=%24SS+0'><img src='x.png'></a>";
 				// }
-    //           document.getElementById("groundt").innerHTML = config.groundt;
+              document.getElementById("groundt").innerHTML = (config.groundt == "1" ? "Disabled" : "Enabled");
 			 // if (config.groundt == "1"){
 				// document.getElementById("groundt").innerHTML = "Disabled <a title='Enable' href='/r?rapi=%24SG+1'><img src='check.png'></a>";
 				// }
 				// else {
 				// document.getElementById("groundt").innerHTML = "Enabled <a title='Disable' href='/r?rapi=%24SG+0'><img src='x.png'></a>";
 				// }
-    //           document.getElementById("relayt").innerHTML = config.relayt;
+              document.getElementById("relayt").innerHTML = (config.relayt == "1" ? "Disabled" : "Enabled");
 			 // if (config.relayt == "1"){
 				// document.getElementById("relayt").innerHTML = "Disabled <a title='Enable' href='/r?rapi=%24SR+1'><img src='check.png'></a>";
 				// }
 				// else {
 				// document.getElementById("relayt").innerHTML = "Enabled <a title='Disable' href='/r?rapi=%24SR+0'><img src='x.png'></a>";
 				// }
-    //           document.getElementById("ventt").innerHTML = config.ventt;
+              document.getElementById("ventt").innerHTML = (config.ventt == "1" ? "Disabled" : "Enabled");
 			 // if (config.ventt == "1"){
 				// document.getElementById("ventt").innerHTML = "Disabled <a title='Enable' href='/r?rapi=%24SV+1'><img src='check.png'></a>";
 				// }
@@ -132,13 +132,7 @@ var r2 = new XMLHttpRequest();
 			  document.getElementById("l2max").innerHTML = config.l2max;
 			  document.getElementById("scale").innerHTML = config.scale;
 			  document.getElementById("offset").innerHTML = config.offset;
-			  document.getElementById("tempt").innerHTML = config.tempt;
-			  if (config.tempt == "1"){
-				document.getElementById("tempt").innerHTML = "Disabled";
-				}
-				else {
-				document.getElementById("tempt").innerHTML = "Enabled";
-				}
+			  document.getElementById("tempt").innerHTML = (config.tempt == "1" ? "Disabled" : "Enabled");
 			  document.getElementById("gfcicount").innerHTML = config.gfcicount;
 			  document.getElementById("nogndcount").innerHTML = config.nogndcount;
 			  document.getElementById("stuckcount").innerHTML = config.stuckcount;
