@@ -1,3 +1,5 @@
+## Moved to https://github.com/OpenEVSE/ESP8266_WiFi_v2.x
+
 # OpenEVSE WiFi
 
 OpenEVSE ESP8266 WIFI serial to EmonCMS link
